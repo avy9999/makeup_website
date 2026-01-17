@@ -20,24 +20,24 @@ export default function About() {
             <div>
               <h2 className="text-4xl md:text-5xl font-light text-gray-900 mb-8 tracking-tight">Our Story</h2>
               <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                JSS Makeup Studio was founded with a simple yet powerful vision: to help every client 
-                discover and enhance their unique beauty. What started as a small studio has grown 
+                JSS Makeup Studio was founded with a simple yet powerful vision: to help every client
+                discover and enhance their unique beauty. What started as a small studio has grown
                 into a trusted name in professional makeup artistry.
               </p>
               <p className="text-lg text-gray-600 mb-6 leading-relaxed">
-                Our team of skilled artists combines technical expertise with creative flair, 
-                ensuring that each client receives a personalized experience tailored to their 
+                Our team of skilled artists combines technical expertise with creative flair,
+                ensuring that each client receives a personalized experience tailored to their
                 individual style and needs.
               </p>
               <p className="text-lg text-gray-600 leading-relaxed">
-                We believe that makeup is more than just cosmetics—it's a form of self-expression 
-                and confidence-building. Every brushstroke is applied with care, precision, and 
+                We believe that makeup is more than just cosmetics—it's a form of self-expression
+                and confidence-building. Every brushstroke is applied with care, precision, and
                 passion for the art of beauty.
               </p>
             </div>
             <div className="relative h-96 rounded-lg overflow-hidden">
               <img
-                src="/images/gallery/makeup-1.jpg"
+                src="/images/gallery/makeup/makeup_1.jpg"
                 alt="JSS Makeup Studio workspace"
                 className="w-full h-full object-cover"
               />
