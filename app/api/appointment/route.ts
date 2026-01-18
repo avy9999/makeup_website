@@ -4,7 +4,28 @@ import { Resend } from 'resend'
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json()
-        const { name, email, phone, service, customService, date, time, message } = body
+        const { name, email, phone, service, customService, date, time, message, recaptchaToken } = body
+
+        // Verify reCAPTCHA
+        if (!recaptchaToken) {
+            return NextResponse.json(
+                { error: 'reCAPTCHA verification required' },
+                { status: 400 }
+            )
+        }
+
+        const recaptchaResponse = await fetch(`https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`, {
+            method: 'POST',
+        })
+
+        const recaptchaData = await recaptchaResponse.json()
+
+        if (!recaptchaData.success) {
+            return NextResponse.json(
+                { error: 'reCAPTCHA verification failed' },
+                { status: 400 }
+            )
+        }
 
         // Validate required fields
         if (!name || !email || !phone || !service || !date || !time) {

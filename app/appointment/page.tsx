@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { FiCalendar, FiClock, FiUser, FiMail, FiPhone, FiCheck } from 'react-icons/fi'
 import emailjs from '@emailjs/browser'
+import ReCAPTCHA from 'react-google-recaptcha'
 
 export default function Appointment() {
   const [formData, setFormData] = useState({
@@ -17,6 +18,7 @@ export default function Appointment() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
 
   const services = [
     'Bridal Makeup',
@@ -47,6 +49,13 @@ export default function Appointment() {
 
     const serviceName = formData.service === 'External' ? formData.customService : formData.service
 
+    // Check reCAPTCHA
+    if (!recaptchaToken) {
+      setSubmitStatus('error')
+      setTimeout(() => setSubmitStatus('idle'), 5000)
+      return
+    }
+
     try {
       // Send to API route for business notification (Resend)
       const response = await fetch('/api/appointment', {
@@ -54,7 +63,7 @@ export default function Appointment() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, recaptchaToken }),
       })
 
       if (!response.ok) {
@@ -293,6 +302,14 @@ export default function Appointment() {
                     Something went wrong. Please try again or contact us directly.
                   </div>
                 )}
+
+                <div className="mb-6">
+                  <ReCAPTCHA
+                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+                    onChange={(token) => setRecaptchaToken(token)}
+                    onExpired={() => setRecaptchaToken(null)}
+                  />
+                </div>
 
                 {/* Submit Button */}
                 <button

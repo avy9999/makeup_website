@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { FiMail, FiPhone, FiMapPin, FiSend } from 'react-icons/fi'
 import emailjs from '@emailjs/browser'
+import ReCAPTCHA from 'react-google-recaptcha'
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -14,6 +15,7 @@ export default function Contact() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle')
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
@@ -27,6 +29,13 @@ export default function Contact() {
     setIsSubmitting(true)
     setSubmitStatus('idle')
 
+    // Check reCAPTCHA
+    if (!recaptchaToken) {
+      setSubmitStatus('error')
+      setTimeout(() => setSubmitStatus('idle'), 5000)
+      return
+    }
+
     try {
       // Send to API route for business notification (Resend)
       const response = await fetch('/api/contact', {
@@ -34,7 +43,7 @@ export default function Contact() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({ ...formData, recaptchaToken }),
       })
 
       if (!response.ok) {
@@ -238,6 +247,14 @@ export default function Contact() {
                     Something went wrong. Please try again later.
                   </div>
                 )}
+
+                <div className="mb-6">
+                  <ReCAPTCHA
+                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+                    onChange={(token) => setRecaptchaToken(token)}
+                    onExpired={() => setRecaptchaToken(null)}
+                  />
+                </div>
 
                 <button
                   type="submit"

@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { FiClock, FiDollarSign, FiCheck } from 'react-icons/fi'
+import { FiClock, FiCheck } from 'react-icons/fi'
 
 export default function Services() {
   const services = [
@@ -7,7 +7,7 @@ export default function Services() {
       title: 'Bridal Makeup',
       description: 'Complete bridal makeup package for your special day. Includes trial session, consultation, and full wedding day service.',
       duration: '3-4 hours',
-      price: 'Starting at $300',
+      price: 'Starting at ₹25,000',
       features: [
         'Pre-wedding trial session',
         'Full face makeup application',
@@ -21,7 +21,7 @@ export default function Services() {
       title: 'Special Events Makeup',
       description: 'Perfect for parties, galas, proms, and any special occasion. Look stunning and camera-ready.',
       duration: '1-2 hours',
-      price: 'Starting at $150',
+      price: 'Starting at ₹12,500',
       features: [
         'Custom look consultation',
         'Full face makeup',
@@ -34,7 +34,7 @@ export default function Services() {
       title: 'Photoshoot Makeup',
       description: 'Professional makeup designed for photography and videography. Camera-ready looks that pop on screen.',
       duration: '2-3 hours',
-      price: 'Starting at $200',
+      price: 'Starting at ₹16,500',
       features: [
         'HD-ready makeup',
         'Color correction',
@@ -47,7 +47,7 @@ export default function Services() {
       title: 'Makeup Lessons',
       description: 'Learn professional techniques from our expert artists. Perfect for beginners or those wanting to improve their skills.',
       duration: '2 hours',
-      price: 'Starting at $120',
+      price: 'Starting at ₹10,000',
       features: [
         'One-on-one instruction',
         'Product recommendations',
@@ -60,7 +60,7 @@ export default function Services() {
       title: 'Hair & Makeup Package',
       description: 'Complete beauty transformation with both hair styling and professional makeup application.',
       duration: '3-4 hours',
-      price: 'Starting at $250',
+      price: 'Starting at ₹20,500',
       features: [
         'Hair styling',
         'Full makeup application',
@@ -73,7 +73,7 @@ export default function Services() {
       title: 'Touch-ups & Refreshes',
       description: 'Quick touch-ups for existing makeup or a fresh look refresh. Perfect for mid-day or evening events.',
       duration: '30-45 mins',
-      price: 'Starting at $75',
+      price: 'Starting at ₹6,000',
       features: [
         'Quick refresh',
         'Foundation touch-up',
@@ -103,9 +103,8 @@ export default function Services() {
             {services.map((service, index) => (
               <div
                 key={index}
-                className={`card overflow-hidden relative ${
-                  service.popular ? 'border-primary-300' : ''
-                }`}
+                className={`card overflow-hidden relative ${service.popular ? 'border-primary-300' : ''
+                  }`}
               >
                 {service.popular && (
                   <div className="absolute top-6 right-6 bg-primary-600 text-white px-4 py-1.5 rounded-full text-xs font-medium tracking-wide">
@@ -122,7 +121,7 @@ export default function Services() {
                       <span className="text-sm">{service.duration}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <FiDollarSign className="text-primary-600" size={18} />
+                      <span className="text-primary-600 font-semibold">₹</span>
                       <span className="font-medium text-sm">{service.price}</span>
                     </div>
                   </div>
@@ -157,8 +156,8 @@ export default function Services() {
               Custom Packages Available
             </h2>
             <p className="text-lg text-gray-600 mb-10 leading-relaxed font-light">
-              Need something specific? We offer custom packages tailored to your unique requirements. 
-              Whether it's a group booking, multiple events, or a special combination of services, 
+              Need something specific? We offer custom packages tailored to your unique requirements.
+              Whether it's a group booking, multiple events, or a special combination of services,
               we're here to create the perfect package for you.
             </p>
             <Link href="/contact" className="btn-primary">
