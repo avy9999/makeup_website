@@ -6,11 +6,28 @@ export async function POST(request: NextRequest) {
         const body = await request.json()
         const { name, email, phone, subject, message, recaptchaToken } = body
 
+        // Check if required environment variables are set
+        if (!process.env.RESEND_API_KEY) {
+            console.error('RESEND_API_KEY environment variable is not set')
+            return NextResponse.json(
+                { error: 'Email service not configured. Please contact administrator.' },
+                { status: 500 }
+            )
+        }
+
         // Verify reCAPTCHA
         if (!recaptchaToken) {
             return NextResponse.json(
                 { error: 'reCAPTCHA verification required' },
                 { status: 400 }
+            )
+        }
+
+        if (!process.env.RECAPTCHA_SECRET_KEY) {
+            console.error('RECAPTCHA_SECRET_KEY environment variable is not set')
+            return NextResponse.json(
+                { error: 'reCAPTCHA service not configured. Please contact administrator.' },
+                { status: 500 }
             )
         }
 
@@ -40,7 +57,7 @@ export async function POST(request: NextRequest) {
         // Option 2: Store in a database
         // Option 3: Send to a webhook/third-party service
 
-        // For now, we'll log it and you can configure email sending
+        // Log the submission for debugging
         console.log('Contact Form Submission:', {
             name,
             email,
@@ -50,14 +67,15 @@ export async function POST(request: NextRequest) {
             timestamp: new Date().toISOString(),
         })
 
+        // Send email using Resend
+        try {
+            const resend = new Resend(process.env.RESEND_API_KEY)
 
-        const resend = new Resend(process.env.RESEND_API_KEY)
-
-        await resend.emails.send({
-            from: 'onboarding@resend.dev', // Use Resend's test domain, or your verified domain
-            to: 'jssmakeupstudio@gmail.com',
-            subject: `Contact Form: ${subject}`,
-            html: `
+            await resend.emails.send({
+                from: 'onboarding@resend.dev', // Use Resend's test domain, or your verified domain
+                to: 'jssmakeupstudio@gmail.com',
+                subject: `Contact Form: ${subject}`,
+                html: `
         <h2>New Contact Form Submission</h2>
         <p><strong>Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${email}</p>
@@ -66,8 +84,15 @@ export async function POST(request: NextRequest) {
         <p><strong>Message:</strong></p>
         <p>${message}</p>
       `,
-        })
-
+            })
+        } catch (emailError) {
+            console.error('Failed to send email:', emailError)
+            // Return success anyway since we logged the submission
+            return NextResponse.json(
+                { message: 'Message received but email delivery failed. Please try again later or contact us directly.' },
+                { status: 200 }
+            )
+        }
 
         return NextResponse.json(
             { message: 'Message sent successfully' },

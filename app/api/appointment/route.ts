@@ -6,11 +6,28 @@ export async function POST(request: NextRequest) {
         const body = await request.json()
         const { name, email, phone, service, customService, date, time, message, recaptchaToken } = body
 
+        // Check if required environment variables are set
+        if (!process.env.RESEND_API_KEY) {
+            console.error('RESEND_API_KEY environment variable is not set')
+            return NextResponse.json(
+                { error: 'Email service not configured. Please contact administrator.' },
+                { status: 500 }
+            )
+        }
+
         // Verify reCAPTCHA
         if (!recaptchaToken) {
             return NextResponse.json(
                 { error: 'reCAPTCHA verification required' },
                 { status: 400 }
+            )
+        }
+
+        if (!process.env.RECAPTCHA_SECRET_KEY) {
+            console.error('RECAPTCHA_SECRET_KEY environment variable is not set')
+            return NextResponse.json(
+                { error: 'reCAPTCHA service not configured. Please contact administrator.' },
+                { status: 500 }
             )
         }
 
@@ -48,7 +65,7 @@ export async function POST(request: NextRequest) {
         // Option 2: Store in a database
         // Option 3: Send to a webhook/third-party service
 
-        // For now, we'll log it and you can configure email sending
+        // Log the submission for debugging
         const serviceName = service === 'External' ? customService : service
 
         console.log('Appointment Request:', {
@@ -62,14 +79,15 @@ export async function POST(request: NextRequest) {
             timestamp: new Date().toISOString(),
         })
 
+        // Send email using Resend
+        try {
+            const resend = new Resend(process.env.RESEND_API_KEY)
 
-        const resend = new Resend(process.env.RESEND_API_KEY)
-
-        await resend.emails.send({
-            from: 'onboarding@resend.dev', // Use Resend's test domain, or your verified domain
-            to: 'jssmakeupstudio@gmail.com',
-            subject: `New Appointment Request - ${serviceName}`,
-            html: `
+            await resend.emails.send({
+                from: 'onboarding@resend.dev', // Use Resend's test domain, or your verified domain
+                to: 'jssmakeupstudio@gmail.com',
+                subject: `New Appointment Request - ${serviceName}`,
+                html: `
         <h2>New Appointment Request</h2>
         <p><strong>Name:</strong> ${name}</p>
         <p><strong>Email:</strong> ${email}</p>
@@ -79,8 +97,15 @@ export async function POST(request: NextRequest) {
         <p><strong>Time:</strong> ${time}</p>
         <p><strong>Additional Notes:</strong> ${message || 'None'}</p>
       `,
-        })
-
+            })
+        } catch (emailError) {
+            console.error('Failed to send email:', emailError)
+            // Return success anyway since we logged the submission
+            return NextResponse.json(
+                { message: 'Appointment request received but email delivery failed. Please try again later or contact us directly.' },
+                { status: 200 }
+            )
+        }
 
         return NextResponse.json(
             { message: 'Appointment request submitted successfully' },

@@ -98,7 +98,7 @@ export default function About() {
 
           <div className="max-w-md mx-auto">
             <div className="card overflow-hidden">
-              <div className="h-72 overflow-hidden">
+              <div className="aspect-square overflow-hidden">
                 <img
                   src="/images/team/sapna-gupta.jpg"
                   alt="Sapna Gupta - Lead Makeup Artist"
