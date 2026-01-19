@@ -102,7 +102,7 @@ export default function About() {
                 <img
                   src="/images/team/sapna-gupta.jpg"
                   alt="Sapna Gupta - Lead Makeup Artist"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-contain"
                 />
               </div>
               <div className="p-8 text-center">
