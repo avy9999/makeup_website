@@ -1,39 +1,29 @@
 # Makeup Studio Website
 
-A beautiful, modern website for a makeup studio featuring multiple pages and a professional design.
+A responsive website developed for a makeup studio and training academy to showcase beauty services, professional makeup courses, and previous work. The platform provides an intuitive user experience with modern design, easy navigation, and appointment booking functionality.
 
 ## Features
 
-- 🏠 Home page with hero section
-- ℹ️ About Us page
-- 💄 Services page
-- 📸 Photo Gallery / Our Previous Works
-- 📧 Contact Us page
-- 📅 Appointment booking page
+- Modern landing page with service highlights
+- Dedicated About Us section
+- Service showcase with detailed offerings
+- Portfolio gallery displaying previous work
+- Contact and inquiry page
+- Appointment booking interface
+- Responsive design for desktop, tablet, and mobile devices
+- Optimized user experience and navigation
 
 ## Tech Stack
 
 - Next.js 14
 - TypeScript
 - Tailwind CSS
+- React
 - React Icons
 
-## Getting Started
+## Project Goals
 
-1. Install dependencies:
-```bash
-npm install
-```
-
-2. Run the development server:
-```bash
-npm run dev
-```
-
-3. Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-## Deployment
-
-This project is configured for deployment on Vercel. Simply push to your repository and connect it to Vercel.
-
-
+- Establish a professional online presence for the makeup studio
+- Showcase beauty services and training programs
+- Enable potential clients to explore services and book appointments
+- Provide a seamless experience across multiple devices
